@@ -1,0 +1,39 @@
+{
+  "extends": "@polkadot/dev/config/tsconfig.json",
+  "exclude": [
+    "build/**/*",
+    "**/build/**/*",
+  ],
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "CommonJS",
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "paths":
+      {
+        "@subspace/api": [
+          "packages/api/src"
+        ],
+        "@subspace/api/*": [
+          "packages/api/src/*"
+        ],
+        "@subspace/types": [
+          "packages/types/src"
+        ],
+        "@subspace/types/*": [
+          "packages/types/src/*"
+        ],
+        "@subspace/type-definitions": [
+          "packages/type-definitions/src"
+        ],
+        "@subspace/type-definitions/*": [
+          "packages/type-definitions/src/*"
+        ],
+      },
+    "typeRoots": [
+      "./node_modules/@polkadot/ts",
+      "./node_modules/@types"
+    ]
+  }
+}
