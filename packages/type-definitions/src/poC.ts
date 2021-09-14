@@ -21,8 +21,7 @@ export default {
   },
   types: {
     /* Kind sp_consensus_poc::offence::{}; */
-    // Kind: '[u8; 16]',
-
+    PoCKind: '[u8; 16]',
     /* RpcSolution sc-consensus-poc-rpc */
     RpcSolution: {
       public_key: '[u8; 32]',
@@ -53,6 +52,18 @@ export default {
     FarmerSignature: 'Signature',
     FarmerId: 'AccountId',
     PoCBlockWeight: 'u32',
+    PoCNextEpochDescriptor: {
+      randomness: 'PoCRandomness'
+    },
+    PoCNextConfigDescriptorV1: {
+      c: '(u64, u64)'
+    },
+    PoCNextConfigDescriptor: {
+      _enum: {
+        V0: 'Null',
+        V1: 'PoCNextConfigDescriptorV1'
+      }
+    },
     ConsensusLog: {
       _enum: {
         Phantom: 'Null',
@@ -63,18 +74,6 @@ export default {
         NextSolutionRangeData: 'NextSolutionRangeDescriptor',
         NextSaltData: 'NextSaltDescriptor'
       }
-    },
-    PoCNextEpochDescriptor: {
-      randomness: 'PoCRandomness'
-    },
-    PoCNextConfigDescriptor: {
-      _enum: {
-        V0: 'Null',
-        V1: 'PoCNextConfigDescriptorV1'
-      }
-    },
-    PoCNextConfigDescriptorV1: {
-      c: '(u64, u64)'
     },
     SolutionRangeDescriptor: {
       solution_range: 'u64'
@@ -104,19 +103,33 @@ export default {
       solution: 'Solution'
     },
 
-    /* EquivocationProof sp_consensus_slots :: WILL CLASH */
-    PoCEquivocationProof: {
+    EquivocationProof: {
       offender: 'FarmerId',
       slot: 'Slot',
-      firstHeader: 'Header',
-      secondHeader: 'Header'
+      first_header: 'Header',
+      second_header: 'Header'
     },
-    EquivocationProof: 'PoCEquivocationProof',
 
-    /* PoCEquivocationOffence pallet-spartan */
     PoCEquivocationOffence: {
       slot: 'Slot',
-      offender: 'FullIdentification'
+      offender: 'FarmerId'
+    },
+
+    PoCGenesisConfiguration: {
+      slot_duration: 'u64',
+      epoch_length: 'u64',
+      c: '(u64, u64)',
+      randomness: 'PoCRandomness'
+
     }
-  }
+  },
+  typesAlias: {
+    poC: {
+      Kind: 'PoCKind',
+      Randomness: 'PoCRandomness',
+      NextEpochDescriptor: 'PoCNextEpochDescriptor',
+      NextConfigDescriptorV1: 'PoCNextConfigDescriptorV1',
+      NextConfigDescriptor: 'PoCNextConfigDescriptor'
+    }
+  },
 };

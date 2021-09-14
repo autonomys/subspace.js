@@ -1,25 +1,32 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable */
 import type { OverrideVersionedType } from '@polkadot/types/types';
-import { rpc as ormlRpc, types as ormlTypes, typesAlias as ormlAlias } from '@open-web3/orml-type-definitions';
 import { jsonrpcFromDefs, typesAliasFromDefs, typesFromDefs } from '@open-web3/orml-type-definitions/utils';
 
 import poC from './poC';
 import offencesPoC from './offencesPoc';
+import runtime from './runtime';
 
 import subspaceVersioned from './spec/subspace';
 
+/* TODO: Add Session Keys
+const additionalOverride = {
+  Keys: 'SessionKeys1'
+};
+*/
+
 const subspaceDefs = {
   poC,
-  offencesPoC
+  offencesPoC,
+  runtime
 };
 
 export const types = {
-  ...ormlTypes,
   ...typesFromDefs(subspaceDefs)
+  //...additionalOverride
 };
 
-export const rpc = jsonrpcFromDefs(subspaceDefs, { ...ormlRpc });
-export const typesAlias = typesAliasFromDefs(subspaceDefs, { ...ormlAlias });
+export const rpc = jsonrpcFromDefs(subspaceDefs);
+export const typesAlias = typesAliasFromDefs(subspaceDefs);
 
 function getBundle(versioned: OverrideVersionedType[]) {
   return {
