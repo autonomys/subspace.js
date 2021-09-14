@@ -1,0 +1,33 @@
+{
+    "poC": {
+        "proposeProofOfSpace": {
+            "description": "rpc method to propose a proof of space",
+            "params": [
+                {
+                    "name": "proposed_proof_of_space_result",
+                    "type": "ProposedProofOfSpaceResult",
+                    "isOptional": false
+                }
+            ],
+            "type": "Null",
+            "isSubscription": false,
+            "jsonrpc": "poC_proposeProofOfSpace",
+            "method": "proposeProofOfSpace",
+            "section": "poC"
+        },
+        "subscribeSlotInfo": {
+            "description": "Slot info subscription",
+            "params": [],
+            "pubsub": [
+                "slot_info",
+                "subscribeSlotInfo",
+                "unsubscribeSlotInfo"
+            ],
+            "type": "RpcNewSlotInfo",
+            "isSubscription": true,
+            "jsonrpc": "poC_subscribeSlotInfo",
+            "method": "subscribeSlotInfo",
+            "section": "poC"
+        }
+    }
+}
