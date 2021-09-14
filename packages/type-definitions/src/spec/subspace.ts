@@ -2,7 +2,7 @@ import type { OverrideVersionedType } from '@polkadot/types/types';
 
 const versioned: OverrideVersionedType[] = [
   {
-    minmax: [100, undefined],
+    minmax: [0, undefined],
     types: {}
   }
 ];

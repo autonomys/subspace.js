@@ -8,17 +8,17 @@ import { generateInterfaceTypes } from '@polkadot/typegen/generate/interfaceRegi
 import { generateTsDef } from '@polkadot/typegen/generate/tsDef';
 import {
   generateDefaultConsts,
+  generateDefaultErrors,
+  generateDefaultEvents,
   generateDefaultQuery,
-  generateDefaultTx,
-  generateDefaultRpc
+  generateDefaultRpc,
+  generateDefaultTx
 } from '@polkadot/typegen/generate';
 import { registerDefinitions } from '@polkadot/typegen/util';
-import generateMobx from '@open-web3/api-mobx/scripts/mobx';
+
 import metaHex from '../src/metadata/static-latest';
 
 import * as defaultDefinations from '@polkadot/types/interfaces/definitions';
-
-import * as ormlDefinations from '@open-web3/orml-types/interfaces/definitions';
 
 import * as subspaceDefinations from '../src/interfaces/definitions.ts';
 
@@ -43,18 +43,16 @@ function filterModules(names: string[], defs: any): string {
 const { runtime, ...substrateDefinations } = defaultDefinations;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { runtime: _runtime, ...ormlModulesDefinations } = ormlDefinations;
 
 const definations = {
   '@polkadot/types/interfaces': substrateDefinations,
-  '@open-web3/orml-types/interfaces': ormlModulesDefinations,
   '@subspace/types/interfaces': subspaceDefinations
 } as any;
 
 const metadata = filterModules(
   [
     'PoC',
-    'offencesPoC'
+    'OffencesPoC'
   ],
   definations
 );
@@ -66,4 +64,5 @@ generateDefaultConsts('packages/types/src/interfaces/augment-api-consts.ts', met
 generateDefaultTx('packages/types/src/interfaces/augment-api-tx.ts', metadata, definations);
 generateDefaultQuery('packages/types/src/interfaces/augment-api-query.ts', metadata, definations);
 generateDefaultRpc('packages/types/src/interfaces/augment-api-rpc.ts', definations);
-generateMobx('packages/types/src/interfaces/augment-api-mobx.ts', metaHex, definations);
+generateDefaultEvents('packages/types/src/interfaces/augment-api-events.ts', metadata, definations);
+generateDefaultErrors('packages/types/src/interfaces/augment-api-errors.ts', metadata, definations);
