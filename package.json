@@ -1,9 +1,5 @@
 {
-  "version": "1.0.0",
   "private": true,
-  "engines": {
-    "yarn": "^1.10.1"
-  },
   "workspaces": [
     "packages/*"
   ],
@@ -12,15 +8,16 @@
     "@polkadot/types": "^5.8.3"
   },
   "scripts": {
-    "update-metadata": "ts-node --project ./tsconfig.json packages/types/scripts/updateMetadata.ts",
-    "generate-metadata": "ts-node --project ./tsconfig.json packages/types/scripts/generate.ts"
+    "build": "yarn build:interfaces && polkadot-dev-build-ts",
+    "build:interfaces": "node -r ts-node/register -r tsconfig-paths/register packages/types/scripts/generate.ts && node -r ts-node/register -r tsconfig-paths/register packages/type-definitions/scripts/generate.ts",
+    "update-metadata": "ts-node --project ./tsconfig.json packages/types/scripts/updateMetadata.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
     "@babel/register": "^7.13.6",
     "@babel/runtime": "^7.14.0",
     "@open-web3/dev-config": "^0.1.13",
-    "@open-web3/util": "^0.9.4-34",
+    "@open-web3/util": "^0.9.4-19",
     "@types/jest": "^25.2.3",
     "ts-node": "^8.6.1",
     "tsconfig-paths": "^3.9.0",
