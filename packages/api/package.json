@@ -1,0 +1,11 @@
+{
+  "name": "@subspace/api",
+  "version": "1.0.0",
+  "description": "Subspace JS API",
+  "main": "index.js",
+  "dependencies": {
+    "@babel/runtime": "^7.12.5",
+    "@polkadot/api": "^5.8.3",
+    "@subspace/types": "^1.0.0"
+  }
+}
