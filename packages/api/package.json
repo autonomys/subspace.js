@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Subspace JS API",
   "main": "index.js",
+  "license": "UNLICENSED",
   "dependencies": {
     "@babel/runtime": "^7.12.5",
     "@polkadot/api": "^5.8.3",

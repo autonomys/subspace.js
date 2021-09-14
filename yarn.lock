@@ -2473,6 +2473,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@subspace/api@workspace:packages/api":
+  version: 0.0.0-use.local
+  resolution: "@subspace/api@workspace:packages/api"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@polkadot/api": ^5.8.3
+    "@subspace/types": ^1.0.0
+  languageName: unknown
+  linkType: soft
+
 "@subspace/type-definitions@^1.0.0, @subspace/type-definitions@workspace:packages/type-definitions":
   version: 0.0.0-use.local
   resolution: "@subspace/type-definitions@workspace:packages/type-definitions"
@@ -2481,7 +2491,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@subspace/types@workspace:packages/types":
+"@subspace/types@^1.0.0, @subspace/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@subspace/types@workspace:packages/types"
   dependencies:

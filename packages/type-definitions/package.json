@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Subspace.js type definations",
   "main": "index.js",
-  "license": "Apache-2.0",
+  "license": "UNLICENSED",
   "dependencies": {
     "@open-web3/orml-type-definitions": "^0.9.4-7"
   }
