@@ -1,4 +1,3 @@
-/* eslint-disable */
 import type { OverrideVersionedType } from '@polkadot/types/types';
 import { jsonrpcFromDefs, typesAliasFromDefs, typesFromDefs } from '@open-web3/orml-type-definitions/utils';
 
@@ -22,7 +21,7 @@ const subspaceDefs = {
 
 export const types = {
   ...typesFromDefs(subspaceDefs)
-  //...additionalOverride
+  // ...additionalOverride
 };
 
 export const rpc = jsonrpcFromDefs(subspaceDefs);

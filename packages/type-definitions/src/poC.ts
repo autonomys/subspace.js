@@ -120,7 +120,6 @@ export default {
       epoch_length: 'u64',
       c: '(u64, u64)',
       randomness: 'PoCRandomness'
-
     }
   },
   typesAlias: {
@@ -131,5 +130,5 @@ export default {
       NextConfigDescriptorV1: 'PoCNextConfigDescriptorV1',
       NextConfigDescriptor: 'PoCNextConfigDescriptor'
     }
-  },
+  }
 };

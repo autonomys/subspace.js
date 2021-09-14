@@ -11,5 +11,5 @@ export default {
       Balance: 'PoCBalance',
       Moment: 'PocMoment'
     }
-  },
+  }
 };
