@@ -68,3 +68,6 @@ build/
 /.yarn/versions
 /.yarn/build-state.yml
 /.yarn/install-state.gz
+
+# vscode config
+.vscode/
