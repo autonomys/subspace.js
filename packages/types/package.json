@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Subspace.js type definations",
   "main": "index.js",
-  "license": "UNLICENSED",
+  "license": "Apache 2.0",
   "dependencies": {
     "@babel/runtime": "^7.10.2",
     "@polkadot/api": "^5.8.3",
