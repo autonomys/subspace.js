@@ -1,23 +1,15 @@
-const base = require('@open-web3/dev-config/config/eslint.cjs');
-
 module.exports = {
-  ...base,
-  ignorePatterns: [
-    '.eslintrc.cjs',
-    '.eslintrc.js',
-    '.github/**',
-    '.vscode/**',
-    '.yarn/**',
-    '**/build/*',
-    '**/coverage/*',
-    '**/node_modules/*'
-  ],
-  parserOptions: {
-    ...base.parserOptions,
-    project: ['./tsconfig.json']
+  root: true,
+  env: {
+    es2021: true,
+    node: true,
   },
-  rules: {
-    ...base.rules,
-    '@typescript-eslint/no-explicit-any': 'off'
-  }
+  plugins: ["eslint-plugin", "@typescript-eslint"],
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+  ],
+  parser: "@typescript-eslint/parser",
+  rules: {},
 };
