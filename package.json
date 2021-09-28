@@ -4,10 +4,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "resolutions": {
-    "@polkadot/api": "^5.8.3",
-    "@polkadot/types": "^5.8.3"
-  },
   "scripts": {
     "build": "yarn build:interfaces && polkadot-dev-build-ts",
     "build:interfaces": "node -r ts-node/register -r tsconfig-paths/register packages/types/scripts/generate.ts && node -r ts-node/register -r tsconfig-paths/register packages/type-definitions/scripts/generate.ts",
@@ -18,8 +14,8 @@
     "@babel/core": "^7.14.3",
     "@babel/register": "^7.13.6",
     "@babel/runtime": "^7.14.0",
-    "@open-web3/dev-config": "^0.1.13",
     "@open-web3/util": "^0.9.4-19",
+    "@polkadot/dev": "^0.62.68",
     "@types/jest": "^25.2.3",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
