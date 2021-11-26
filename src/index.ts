@@ -1,4 +1,4 @@
-import { SubspaceClient, ObjectId } from "./subspaceClient";
+import { SubspaceClient } from "./subspaceClient";
 import { Identity } from "./identity";
 
-export { SubspaceClient, Identity, ObjectId };
+export { SubspaceClient, Identity };
