@@ -1,0 +1,18 @@
+{
+  "name": "subspace-js-node-example",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "rm -rf node_modules/ && npm ci && rm -rf dist && tsc",
+    "start": "node ./dist/index.js"
+  },
+  "dependencies": {
+    "subspace.js": "file:../../../subspace.js"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "@types/node": "^16.11.9",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "typescript": "^4.4.2"
+  }
+}
