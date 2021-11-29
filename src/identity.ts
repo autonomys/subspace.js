@@ -3,25 +3,26 @@ import { Keyring } from "@polkadot/api";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { Keypair } from "@polkadot/util-crypto/types";
 import { appSettings, accountSettings, keyringOptions } from "./config";
+import { NO_WEB3, CRYPTO_LOAD_FAIL, NO_ACCOUNT } from "./constants";
 
 /**
  * @name Identity
- * @summary Expose methods to create a keyring and keypair from different sources.
+ * @summary The Identity class is used to create a keyring and keypair from different sources.
  * @description
- * Use fromWeb3 to generate an Identity from web3Accounts
- * (For web apps using Polkadot.js extension)
- * Use fromUri or fromPair to generate an Identity using given parameters.
- * (For node scripts)
+ * - Use fromWeb3 to generate an Identity from web3Accounts.
+ *    For web apps using Polkadot.js extension.
+ * - Use fromUri or fromPair to generate an Identity using given parameters.
+ *    For node js scripts.
  */
 export class Identity {
   /**
    * @name fromWeb3
    * @summary Creates an Identity instance from web3Accounts.
-   * @description Load and store injected accounts in a keyring object
-   * using web3Accounts from @polkadot/extension-dapp
+   * @description Load and store injected accounts in a keyring object.
+   * using web3Accounts from @polkadot/extension-dapp.
    * @param address? Optional.
-   * If the param is present the method will set the default keypair linked to this address.
-   * If is not present the method will set default keypair using the first account from web3Accounts.
+   * If the param is present, the method will set the default keypair linked to this address.
+   * If it is not present, the method will set default keypair using the first account from web3Accounts.
    * @return Promise<Identity>
    */
   public static fromWeb3 = async (
@@ -32,39 +33,43 @@ export class Identity {
       const { web3Accounts, web3Enable } = await import(
         "@polkadot/extension-dapp"
       );
-      cryptoWaitReady().then(async (ready) => {
-        if (ready) {
-          const isWeb3Enable = await web3Enable(appSettings.APP_NAME);
-          if (!isWeb3Enable) reject("Web3 not enabled or available.");
+      cryptoWaitReady()
+        .then(async (ready) => {
+          if (ready) {
+            const isWeb3Enable = await web3Enable(appSettings.APP_NAME);
+            if (!isWeb3Enable) reject(NO_WEB3);
 
-          const allWeb3Accounts = await web3Accounts(accountSettings);
-          if (!allWeb3Accounts || allWeb3Accounts.length === 0)
-            reject("No accounts available");
+            const allWeb3Accounts = await web3Accounts(accountSettings);
+            if (!allWeb3Accounts || allWeb3Accounts.length === 0)
+              reject(NO_ACCOUNT);
 
-          const keyring = new Keyring(keyringOptions);
-          allWeb3Accounts.forEach(({ address, meta }) => {
-            keyring.addFromAddress(address, meta);
-          });
+            const keyring = new Keyring(keyringOptions);
+            allWeb3Accounts.forEach(({ address, meta }) => {
+              keyring.addFromAddress(address, meta);
+            });
 
-          const keyringPair = address
-            ? keyring.getPair(address)
-            : keyring.getPairs()[0];
+            const keyringPair = address
+              ? keyring.getPair(address)
+              : keyring.getPairs()[0];
 
-          resolve(new Identity(keyring, keyringPair));
-        } else {
-          reject("cryptoWaitReady failed");
-        }
-      });
+            resolve(new Identity(keyring, keyringPair));
+          } else {
+            reject(CRYPTO_LOAD_FAIL);
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
     });
   };
 
   /**
    * @name fromUri
    * @summary Creates an Identity from a secret uri.
-   * @description SURI format for specifying secret keys
+   * @description SURI format for specifying secret keys.
    * <secret>/<soft-key>//<hard-key>///<password>`
    * `/<soft-key>` and `//<hard-key>` maybe repeated and mixed.
-   * `///password` may be omitted
+   * `///password` may be omitted.
    * The secret can be a hex string, mnemonic phrase or a string (to be padded).
    * @param suri Example: `//Alice///password` or a mnemonic phrase.
    * @return Promise<Identity>
@@ -78,7 +83,7 @@ export class Identity {
             const keyringPair = keyring.addFromUri(suri, null, keyring.type);
             resolve(new Identity(keyring, keyringPair));
           } else {
-            reject("cryptoWaitReady failed");
+            reject(CRYPTO_LOAD_FAIL);
           }
         })
         .catch((e: Error) => {
@@ -89,8 +94,11 @@ export class Identity {
 
   /**
    * @name fromKeypair
-   * @summary Creates an Identity from an explicit publicKey/secreteKey combination
-   * @description SURI format for specifying secret keys `
+   * @summary Creates an Identity from an explicit publicKey/secreteKey combination.
+   * @description `
+   * @param keyPair  an explicit publicKey/secreteKey combination.
+   * KeyPair: `{ publicKey: '0x...', secretKey: '0x...' }`
+   * @return Promise<Identity>
    */
   public static fromKeypair = async (keyPair: Keypair): Promise<Identity> => {
     return new Promise<Identity>((resolve, reject) => {
@@ -100,21 +108,38 @@ export class Identity {
           const keyringPair = keyring.addFromPair(keyPair, null, keyring.type);
           resolve(new Identity(keyring, keyringPair));
         } else {
-          reject("cryptoWaitReady failed");
+          reject(CRYPTO_LOAD_FAIL);
         }
       });
     });
   };
 
+  /**
+   * @name constructor
+   * @summary Creates an Identity instance.
+   * @description Load and store injected accounts in a keyring object.
+   * @param keyring  Keyring object.
+   * @param keyringPair  KeyringPair object.
+   * @return Identity
+   */
   public constructor(
     private readonly keyring: Keyring,
     private readonly keyringPair: KeyringPair
   ) {}
 
+  /**
+   * @name getKeyringPair
+   * @summary Returns the keyringPair object.
+   * @return KeyringPair
+   */
   public getKeyringPair(): KeyringPair {
     return this.keyringPair;
   }
-
+  /**
+   * @name getKeyring
+   * @summary Returns the keyring object.
+   * @return Keyring
+   */
   public getKeyring(): Keyring {
     return this.keyring;
   }
