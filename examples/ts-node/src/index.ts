@@ -31,7 +31,7 @@ async function usage(objectData: Uint8Array) {
     const object: Uint8Array = await subspaceClient.getObject(objectId);
 
     // Write the file as a copy from the original
-    fs.writeFile("./sample-from-objectStore.png", object, {}, () => {
+    fs.writeFile("./sample-from-objectStore.jpg", object, {}, () => {
       console.log("writeFile ./sample-from-objectStore.jpg");
     });
   } catch (e) {
