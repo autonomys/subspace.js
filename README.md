@@ -66,6 +66,33 @@ Build the library.
 
 - `npm run build`
 
+# Usage
+
+```javascript
+// Import the Subspace.js library.
+import { SubspaceClient, Identity } from "subspace.js";
+
+// Generate an Identity from node.js
+const identity = await Identity.fromUri(mnemonic);
+const identity = await Identity.fromKeypair(keyPair);
+
+// Generate an Identity from broser using web3Account (injected by extension)
+const identity = await Identity.fromWeb3();
+
+// Generate a SubspaceClient and connect to node and farmer rpc endpoints.
+const subspaceClient = await SubspaceClient.connect(
+  identity,
+  NODE_WS_PROVIDER,
+  FARMER_WS_PROVIDER
+);
+
+// Put the file as (Uint8Array) in to the objectStore and return the objectId
+const objectId: string = await subspaceClient.putObject(objectData);
+
+// Using the objectId get the file as (Uint8Array) from the objectStore.
+const object: Uint8Array = await subspaceClient.getObject(objectId);
+```
+
 # Run the examples.
 
 - Check the examples folder for node.js and browser.
