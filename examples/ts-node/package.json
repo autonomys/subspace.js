@@ -2,7 +2,7 @@
   "name": "subspace-js-node-example",
   "version": "0.1.0",
   "scripts": {
-    "build": "rm -rf node_modules/ && npm ci && rm -rf dist && tsc",
+    "build": "rm -rf dist && tsc",
     "start": "node ./dist/index.js"
   },
   "dependencies": {

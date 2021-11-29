@@ -32,3 +32,12 @@ Install dependencies:
 Run the example:
 
 `npm start`
+
+## .env
+
+You can use the `.env` file to configure the providers endoints, if .env is not present the SubspaceClient will use the default endpoints.
+
+```
+REACT_APP_NODE_WS_PROVIDER=ws://localhost:9944
+REACT_APP_FARMER_WS_PROVIDER=ws://localhost:9955
+```

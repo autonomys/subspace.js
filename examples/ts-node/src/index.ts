@@ -1,6 +1,8 @@
 import { SubspaceClient, Identity } from "subspace.js";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
 import * as fs from "fs";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const NODE_WS_PROVIDER = process.env.NODE_WS_PROVIDER;
 const FARMER_WS_PROVIDER = process.env.FARMER_WS_PROVIDER;

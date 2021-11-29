@@ -61,3 +61,12 @@ fs.writeFile("./sample-from-objectStore.png", object, {}, () => {
   console.log("writeFile ./sample-from-objectStore.jpg");
 });
 ```
+
+## .env
+
+You can use the `.env` file to configure the providers endoints, if .env is not present the SubspaceClient will use the default endpoints.
+
+```
+NODE_WS_PROVIDER=ws://localhost:9944
+FARMER_WS_PROVIDER=ws://localhost:9955
+```

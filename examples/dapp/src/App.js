@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { SubspaceClient, Identity } from "subspace.js";
 import "./App.css";
 
+const NODE_WS_PROVIDER = process.env.REACT_APP_NODE_WS_PROVIDER;
+const FARMER_WS_PROVIDER = process.env.REACT_APP_FARMER_WS_PROVIDER;
+
 function App() {
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [identity, setIdentity] = useState(null);
@@ -24,7 +27,11 @@ function App() {
   useEffect(() => {
     try {
       if (identity) {
-        SubspaceClient.connect(identity).then((subspaceClient) => {
+        SubspaceClient.connect(
+          identity,
+          NODE_WS_PROVIDER,
+          FARMER_WS_PROVIDER
+        ).then((subspaceClient) => {
           setSubspaceClient(subspaceClient);
           setSelectedAccount(identity.getKeyringPair().address);
         });
