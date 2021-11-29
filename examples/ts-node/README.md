@@ -12,12 +12,12 @@ This example uses subspace.js to:
 
   - Load a sample `Object` data (`sample-input.jpg`) as an array of bytes.
   - Send the `Object` to the network calling `putObject`.
-  - Receives the `objectId` from the previus call.
+  - Receives the `objectId` from the previous call.
 
 - Get Object:
 
   - Send the `objectId` to the network calling `getObject`.
-  - Receives the `Object` from the previus call.
+  - Receives the `Object` from the previous call.
 
 - Write the file to disk `sample-from-objectStore.jpg`.
 
@@ -25,7 +25,7 @@ This example uses subspace.js to:
 
 Install dependencies:
 
-`npm i`
+`npm ci`
 
 # Build
 
@@ -52,7 +52,6 @@ const subspaceClient = await SubspaceClient.connect(
 
 // Put the file as (Uint8Array) in to the objectStore and return the objectId
 const objectId: string = await subspaceClient.putObject(objectData);
-console.log("objectId", objectId);
 
 // Using the objectId get the file as (Uint8Array) from the objectStore.
 const object: Uint8Array = await subspaceClient.getObject(objectId);
