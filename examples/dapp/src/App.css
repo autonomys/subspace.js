@@ -1,0 +1,15 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  min-height: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
+hr{
+  border: 1px dotted gray;
+}
