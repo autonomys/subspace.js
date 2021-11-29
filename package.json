@@ -2,7 +2,7 @@
   "name": "subspace.js",
   "version": "1.0.0",
   "license": "Apache 2.0",
-  "description": "A JavaScript library that provides a simple API to submit user data to the subspace network.",
+  "description": "This JavaScript library provides a simple API to submit and retrieve user data to the Subspace network.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [

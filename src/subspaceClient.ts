@@ -4,18 +4,20 @@ import { ApiPromise, WsProvider } from "@polkadot/api";
 import { hexToU8a, u8aToHex } from "@polkadot/util";
 import { Identity } from "./identity";
 import { appSettings } from "./config";
+import { web3FromSource } from "@polkadot/extension-dapp";
 
 /**
  * @name SubspaceClient
- * @summary Expose methods to Put and Get an Object from Subspace network using the Storage API.
+ * @summary  The SubspaceClient class expose methods to
+ * Put and Get an Object from Subspace network using the Storage API.
  */
 export class SubspaceClient {
   /**
    * @name connect
-   * @summary Connect to Subspace network rpc nodes to put and get objects using the Subspace Storage API.
-   * @param identity an already generated Identity object containing a keyring and keypair.
-   * @param wsRpcEndpoint optional, by default it will connect to a public Subspace client rpc node.
-   * @param wsRpcEndpointFarmer optional, by default it will connect to a public Subspace farmer rpc node.
+   * @summary Connect to Subspace network RPC nodes to put and get objects using the Subspace Storage API.
+   * @param identity A previously created Identity Object.
+   * @param wsRpcEndpoint Optional, by default it will connect to a public Subspace client rpc node.
+   * @param wsRpcEndpointFarmer Optional, by default it will connect to a public Subspace farmer rpc node.
    * @return Promise<SubspaceClient>
    */
   public static async connect(
@@ -48,12 +50,19 @@ export class SubspaceClient {
     private readonly identity: Identity
   ) {}
 
-  public setSigner(signer: Signer): boolean | string {
+  /**
+   * @name setSigner
+   * @summary Set the current api signer to use to submit extrinsics.
+   * @description Set an external signer which will be used to sign extrinsic when account passed in is not KeyringPair
+   * @param signer
+   * @return boolean | any
+   */
+  public setSigner(signer: Signer): boolean | any {
     try {
       this.api.setSigner(signer);
       return true;
-    } catch (e) {
-      return e.message;
+    } catch (e: any) {
+      return e;
     }
   }
 
@@ -65,11 +74,16 @@ export class SubspaceClient {
    * objectId can be used to retrieve the data with getObject method.
    */
   public async putObject(object: Uint8Array): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      const locked: boolean = this.identity.getKeyringPair().isLocked;
-      const account: AddressOrPair = locked
-        ? this.identity.getKeyringPair().address
-        : this.identity.getKeyringPair();
+    return new Promise<string>(async (resolve, reject) => {
+      const keyPair = this.identity.getKeyringPair();
+      const locked: boolean = keyPair.isLocked;
+      const account: AddressOrPair = locked ? keyPair.address : keyPair;
+
+      if (keyPair.meta.source === "polkadot-js") {
+        const source = keyPair.meta.source;
+        const injected = await web3FromSource(source);
+        this.setSigner(injected.signer);
+      }
 
       this.api.tx.objectStore
         .put(u8aToHex(object))
