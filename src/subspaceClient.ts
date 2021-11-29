@@ -4,7 +4,6 @@ import { ApiPromise, WsProvider } from "@polkadot/api";
 import { hexToU8a, u8aToHex } from "@polkadot/util";
 import { Identity } from "./identity";
 import { appSettings } from "./config";
-import { web3FromSource } from "@polkadot/extension-dapp";
 
 /**
  * @name SubspaceClient
@@ -79,7 +78,9 @@ export class SubspaceClient {
       const locked: boolean = keyPair.isLocked;
       const account: AddressOrPair = locked ? keyPair.address : keyPair;
 
-      if (keyPair.meta.source === "polkadot-js") {
+      // Run only if the keyPair was loaded from extension
+      if (keyPair.meta && keyPair.meta.source === "polkadot-js") {
+        const { web3FromSource } = await import("@polkadot/extension-dapp");
         const source = keyPair.meta.source;
         const injected = await web3FromSource(source);
         this.setSigner(injected.signer);
