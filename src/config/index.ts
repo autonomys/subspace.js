@@ -1,13 +1,12 @@
-import * as dotenv from "dotenv";
 import { Web3AccountsOptions } from "@polkadot/extension-inject/types";
-import { KeyringOptions } from "@polkadot/ui-keyring/types";
-dotenv.config();
+import { KeyringOptions } from "@polkadot/keyring/types";
 
+// Default settings
+// NODE_WS_PROVIDER and FARMER_WS_PROVIDER are overridden from the SubspaceClient.connect method
 const appSettings = {
   APP_NAME: "Subspace.js | Storage API",
-  PROVIDER_SOCKET: process.env.PROVIDER_SOCKET || "ws://localhost:9944",
-  FARMER_PROVIDER_SOCKET:
-    process.env.FARMER_PROVIDER_SOCKET || "ws://localhost:9955",
+  NODE_WS_PROVIDER: "ws://localhost:9944",
+  FARMER_WS_PROVIDER: "ws://localhost:9955",
 };
 
 const accountSettings: Web3AccountsOptions = {
@@ -16,7 +15,6 @@ const accountSettings: Web3AccountsOptions = {
 };
 
 const keyringOptions: KeyringOptions = {
-  isDevelopment: true,
   ss58Format: 2254,
   type: "sr25519",
 };

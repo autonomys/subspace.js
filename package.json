@@ -9,7 +9,6 @@
     "dist"
   ],
   "scripts": {
-    "build:dev": "rm -rf node_modules && npm ci && npm run build",
     "build": "rm -rf dist && tsc"
   },
   "dependencies": {
@@ -21,7 +20,6 @@
     "@polkadot/extension-dapp": "^0.41.1"
   },
   "devDependencies": {
-    "typescript": "^4.4.2",
-    "dotenv": "^10.0.0"
+    "typescript": "^4.4.2"
   }
 }
