@@ -12,13 +12,13 @@ function App() {
   const [fileData, setFileData] = useState(null);
 
   useEffect(() => {
-    try {
-      Identity.fromWeb3().then((identity) => {
+    Identity.fromWeb3()
+      .then((identity) => {
         setIdentity(identity);
+      })
+      .catch((error) => {
+        setMessage(error);
       });
-    } catch (error) {
-      message = error.message;
-    }
   }, []);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ function App() {
         });
       }
     } catch (error) {
-      message = error.message;
+      setMessage(error);
     }
   }, [identity]);
 
@@ -38,11 +38,41 @@ function App() {
     setSelectedAccount(address);
   };
 
+  const loadFile = (file) => {
+    let reader = new FileReader();
+    reader.onload = () => {
+      if (reader.result) {
+        const value = new Uint8Array(reader.result);
+        setFileData(value);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  const getObject = async () => {
+    try {
+      const object = await subspaceClient.getObject(objectId);
+      setObject(object);
+    } catch (e) {
+      setMessage(e);
+    }
+  };
+
+  const putObject = async () => {
+    try {
+      const objectId = await subspaceClient.putObject(fileData);
+      setObjectId(objectId);
+    } catch (e) {
+      setMessage(e);
+    }
+  };
+
   return (
     <div className="App">
       <h1>Subspace.js dapp example</h1>
+      <p>{message && " " + message}</p>
       <hr />
-      <h2>1. Selec an account.</h2>
+      <h2>1. Select an account.</h2>
       <h3>
         <select id="accounts">
           {identity &&
@@ -58,29 +88,28 @@ function App() {
                       onChange(account.address);
                     }}
                   >
-                    {getLabel(account)}
+                    {account && getLabel(account)}
                   </option>
                 );
               })}
         </select>
       </h3>
-      <h3>Selected: {selectedAccount && selectedAccount}</h3>
+      <h3> {selectedAccount && "Selected account: " + selectedAccount}</h3>
       <hr />
       <h2>2. Load a file.</h2>
       <h3>
         <input
           type="file"
           id="file"
+          accept="image/*"
+          disabled={!selectedAccount}
           onChange={(e) => {
-            if (e.target.files && e.target.files.length > 0) {
-              let reader = new FileReader();
-              reader.onload = () => {
-                if (reader.result) {
-                  const value = new Uint8Array(reader.result);
-                  setFileData(value);
-                }
-              };
-              reader.readAsArrayBuffer(e.target.files[0]);
+            if (e.target.files[0].type.includes("image/")) {
+              if (e.target.files && e.target.files.length > 0) {
+                loadFile(e.target.files[0]);
+              }
+            } else {
+              setMessage("Please use an image file for this demo.");
             }
           }}
         ></input>
@@ -88,8 +117,7 @@ function App() {
       <h3>
         {fileData && (
           <img
-            id="ItemPreview"
-            src={`data:image/jpg;base64,${Buffer.from(fileData).toString(
+            src={`data:image/*;base64,${Buffer.from(fileData).toString(
               "base64"
             )}`}
           ></img>
@@ -98,51 +126,34 @@ function App() {
       <hr />
       <h2>3. Put a file.</h2>
       <h3>
-        <button
-          onClick={async () => {
-            const objectId = await subspaceClient.putObject(fileData);
-            setObjectId(objectId);
-          }}
-        >
+        <button disabled={!fileData} onClick={() => putObject()}>
           Submit putObject
         </button>
       </h3>
-      <h3>Object ID:{objectId && objectId}</h3>
+      <h3> {objectId && "Object Id: " + objectId}</h3>
       <hr />
-      <h2>Step 4. Get the file.</h2>
+      <h2>4. Get the file.</h2>
       <h3>
-        <button
-          onClick={async () => {
-            try {
-              const object = await subspaceClient.getObject(objectId);
-              const b64 = Buffer.from(object).toString("base64");
-              setObject(b64);
-            } catch (e) {
-              setMessage(e);
-            }
-          }}
-        >
+        <button disabled={!objectId} onClick={() => getObject()}>
           Submit getObject
         </button>
       </h3>
+      <p>{message && " " + message}</p>
       <h3>
         {object && (
-          <img id="ItemPreview" src={`data:image/jpg;base64,${object}`}></img>
+          <img
+            src={`data:image/*;base64,${Buffer.from(object).toString(
+              "base64"
+            )}`}
+          ></img>
         )}
-        {message && " " + message}
       </h3>
     </div>
   );
 }
 
-const getLabel = (account) => {
-  if (!account) return "";
-  return (
-    account.meta.name.toUpperCase() + " | " + prettyHash(account.address, 4, 4)
-  );
+const getLabel = ({ address, meta }) => {
+  return meta.name.toUpperCase() + " | " + address;
 };
-const prettyHash = (hash, initSlice, lastsSlice) => {
-  return `0x${hash.slice(0, initSlice)}...${hash.slice(
-    hash.length - lastsSlice
-  )}`;
-};
+
+export default App;
