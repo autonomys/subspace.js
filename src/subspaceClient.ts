@@ -28,10 +28,10 @@ export class SubspaceClient {
     return new Promise<SubspaceClient>(async (resolve, reject) => {
       try {
         const farmerProvider = new WsProvider(
-          wsRpcEndpointFarmer || appSettings.FARMER_PROVIDER_SOCKET
+          wsRpcEndpointFarmer || appSettings.FARMER_WS_PROVIDER
         );
         const provider = new WsProvider(
-          wsRpcEndpoint || appSettings.PROVIDER_SOCKET
+          wsRpcEndpoint || appSettings.NODE_WS_PROVIDER
         );
         const api = await ApiPromise.create({
           provider,
