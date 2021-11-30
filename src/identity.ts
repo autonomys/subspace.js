@@ -2,7 +2,6 @@ import { cryptoWaitReady } from "@polkadot/util-crypto";
 import { Keyring } from "@polkadot/api";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { appSettings, accountSettings, keyringOptions } from "./config";
-import { NO_WEB3, CRYPTO_LOAD_FAIL, NO_ACCOUNT } from "./errors";
 
 /**
  * @name Identity
@@ -24,17 +23,17 @@ export class Identity {
    * If it is not present, the method will set default keypair using the first account from web3Accounts.
    * @return Promise<Identity>
    */
-  public static async fromWeb3(address?: string | Uint8Array): Promise<Identity> {
+   public static async fromWeb3(address?: string | Uint8Array): Promise<Identity> {
     if (await cryptoWaitReady()) {
       // import polkadot extension methods only if web3 is available (use only in browser context)
       const { web3Accounts, web3Enable } = await import(
         "@polkadot/extension-dapp"
       );
       const isWeb3Enable = await web3Enable(appSettings.APP_NAME);
-      if (!isWeb3Enable) throw NO_WEB3;
+      if (!isWeb3Enable) throw new Error("Web3 not enabled or available.");
 
       const allWeb3Accounts = await web3Accounts(accountSettings);
-      if (!allWeb3Accounts || allWeb3Accounts.length === 0) throw NO_ACCOUNT;
+      if (!allWeb3Accounts || allWeb3Accounts.length === 0) throw new Error("No accounts available.");
 
       const keyring = new Keyring(keyringOptions);
       allWeb3Accounts.forEach(({ address, meta }) => {
@@ -47,7 +46,7 @@ export class Identity {
 
       return new Identity(keyring, keyringPair);
     } else {
-      throw CRYPTO_LOAD_FAIL;
+      throw new Error("Crypto wait ready failed.");
     }
   }
   /**
@@ -64,7 +63,7 @@ export class Identity {
       const keyringPair = keyring.addFromUri(suri, undefined, keyring.type);
       return new Identity(keyring, keyringPair);
     } else {
-      throw CRYPTO_LOAD_FAIL;
+      throw new Error("Crypto wait ready failed");
     }
   }
 
