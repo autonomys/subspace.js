@@ -24,23 +24,17 @@ export class SubspaceClient {
     wsRpcEndpoint?: string,
     wsRpcEndpointFarmer?: string
   ): Promise<SubspaceClient> {
-    return new Promise<SubspaceClient>(async (resolve, reject) => {
-      try {
-        const farmerProvider = new WsProvider(
-          wsRpcEndpointFarmer || appSettings.FARMER_WS_PROVIDER
-        );
-        const provider = new WsProvider(
-          wsRpcEndpoint || appSettings.NODE_WS_PROVIDER
-        );
-        const api = await ApiPromise.create({
-          provider,
-        });
-
-        resolve(new SubspaceClient(api, farmerProvider, identity));
-      } catch (e) {
-        reject(e.message);
-      }
+    const farmerProvider = new WsProvider(
+      wsRpcEndpointFarmer || appSettings.FARMER_WS_PROVIDER
+    );
+    const provider = new WsProvider(
+      wsRpcEndpoint || appSettings.NODE_WS_PROVIDER
+    );
+    const api = await ApiPromise.create({
+      provider,
     });
+
+    return new SubspaceClient(api, farmerProvider, identity);
   }
 
   private constructor(
@@ -54,25 +48,20 @@ export class SubspaceClient {
    * @summary Set the current api signer to use to submit extrinsics.
    * @description Set an external signer which will be used to sign extrinsic when account passed in is not KeyringPair
    * @param signer
-   * @return boolean | any
+   * @return boolean
    */
-  public setSigner(signer: Signer): boolean | any {
-    try {
-      this.api.setSigner(signer);
-      return true;
-    } catch (e: any) {
-      return e;
-    }
+  public setSigner(signer: Signer): void {
+    return this.api.setSigner(signer);
   }
 
   /**
    * @name putObject
    * @summary Using a keypair from Identity Object, submit an extrinsic using objectStore module.
-   * @param object an 8 bytes array that contains the data to store.
+   * @param object an Uint8Array that contains the data to store.
    * @return Promise<string> If the Object was successfully stored it return the objectId.
    * objectId can be used to retrieve the data with getObject method.
    */
-  public async putObject(object: Uint8Array): Promise<string> {
+  public putObject(object: Uint8Array): Promise<string> {
     return new Promise<string>(async (resolve, reject) => {
       const keyPair = this.identity.getKeyringPair();
       const locked: boolean = keyPair.isLocked;
@@ -99,7 +88,7 @@ export class SubspaceClient {
               }
             }
           } else if (isError) {
-            reject(`isError: ${isError} isInBlock ${status.isInBlock}`);
+            reject(new Error(`isError: ${isError}`));
           }
         });
     });
@@ -111,20 +100,15 @@ export class SubspaceClient {
    * @param objectId An objectId created from putObject used to find and return the Object data.
    * @return Promise<Uint8Array> If the Object was found it return the Object data.
    */
-  public async getObject(objectId: string): Promise<Uint8Array> {
-    return new Promise<Uint8Array>(async (resolve, reject) => {
-      this.farmerProvider.send("findObject", [objectId]).then(
-        (result) => {
-          if (result) {
-            resolve(hexToU8a(result.data));
-          } else {
-            reject("Object not found");
-          }
-        },
-        (reason) => {
-          reject(reason);
+  public getObject(objectId: string): Promise<Uint8Array> {
+    return new Promise<Uint8Array>((resolve, reject) => {
+      this.farmerProvider.send("findObject", [objectId]).then((result) => {
+        if (result) {
+          resolve(hexToU8a(result.data));
+        } else {
+          reject(new Error("Object not found"));
         }
-      );
+      });
     });
   }
 }

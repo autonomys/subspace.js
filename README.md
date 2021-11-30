@@ -60,7 +60,7 @@ Clone this repository:
 
 Install dependencies
 
-- `npm install`
+- `npm ci`
 
 Build the library.
 
@@ -74,8 +74,6 @@ import { SubspaceClient, Identity } from "subspace.js";
 
 // Generate an Identity from node.js
 const identity = await Identity.fromUri(mnemonic);
-const identity = await Identity.fromKeypair(keyPair);
-
 // Generate an Identity from broser using web3Account (injected by extension)
 const identity = await Identity.fromWeb3();
 
