@@ -1,0 +1,25 @@
+{
+  "name": "subspace.js",
+  "version": "0.1.0",
+  "license": "Apache 2.0",
+  "description": "This JavaScript library provides a simple API to submit and retrieve user data to the Subspace network.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  },
+  "dependencies": {
+    "@polkadot/api": "6.9.2",
+    "@polkadot/ui-keyring": "^0.86.7",
+    "@polkadot/types": "6.9.2",
+    "@polkadot/util": "^7.9.2",
+    "@polkadot/util-crypto": "^7.9.2",
+    "@polkadot/extension-dapp": "^0.41.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.2"
+  }
+}
