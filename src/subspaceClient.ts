@@ -75,7 +75,7 @@ export class SubspaceClient {
         this.setSigner(injected.signer);
       }
 
-      this.api.tx.objectStore
+      const unsubscribe = await this.api.tx.objectStore
         .put(u8aToHex(object))
         .signAndSend(account, ({ status, events, isError }) => {
           if (status.isInBlock) {
@@ -85,10 +85,12 @@ export class SubspaceClient {
                 event.section === "objectStore"
               ) {
                 resolve(event.data[1].toString().slice(2));
+                unsubscribe();
               }
             }
           } else if (isError) {
             reject(new Error(`isError: ${isError}`));
+            unsubscribe();
           }
         });
     });
