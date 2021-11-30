@@ -7,8 +7,12 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "sourceMap": true,
-    "lib": ["ES2021", "dom"],
-    "rootDir": "src"
+    "rootDir": "src",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true
   },
-  "include": ["./src/**/*"]
+  "include": ["src"]
 }
