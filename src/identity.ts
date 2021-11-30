@@ -2,7 +2,7 @@ import { cryptoWaitReady } from "@polkadot/util-crypto";
 import { Keyring } from "@polkadot/api";
 import { KeyringPair } from "@polkadot/keyring/types";
 import { appSettings, accountSettings, keyringOptions } from "./config";
-import { NO_WEB3, CRYPTO_LOAD_FAIL, NO_ACCOUNT } from "./constants";
+import { NO_WEB3, CRYPTO_LOAD_FAIL, NO_ACCOUNT } from "./errors";
 
 /**
  * @name Identity
