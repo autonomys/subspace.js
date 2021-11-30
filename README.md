@@ -4,53 +4,27 @@ This JavaScript library provides a simple API to submit and retrieve user data t
 
 # Storage API.
 
-The Storage API exposes a simple way to consume _put_, and _get_ methods from a Subspace node feature called [pallet-object-store](https://github.com/subspace/subspace/tree/main/crates/pallet-object-store).
-This pallet implements a simple object-store and two public RPC methods described in the next section.
+The Storage API exposes a Subspace node feature called [pallet-object-store](https://github.com/subspace/subspace/tree/main/crates/pallet-object-store) that implements RPC methods to store an **Object** from user-provided data. The user can send a simple text or even a file; the `pallet-object-store` receives an **Object** to store and generate an **objectId**.
 
-## pallet-object-store.
+- `put`: Receive a signed transaction containing an **Object** to store. It emit a `DataSubmitted Event` with an **objectId** to get the **Object** from the network.
 
-Implements RPC methods to store an **Object** from user-provided **data**. The user can send a simple text or even a file; the `pallet-object-store` receives an **Object** to store and generate an **objectId**.
+- `findObject`: Receives an **objectId** to find the related **Object** stored, if it exists this method will return the **Object** data.
 
-- **put**: Receive a signed transaction containing **data** as an array of bytes. If an **Object** is stored, a `data submitted event` will emit to the network message with **objectId** to get the **Object** from the **findObject** RPC method.
+To expose these methods, this library implements two main classes:
 
-- **findObject**: A farmer node rpc call that will return an stored **Object** using and **objectId**.
+- **Identity**: Class to load a **keyPair** from different sources. An instance of this class is required to create a **SubspaceClient**.
 
-## Polkadot.js and Subspace.js.
+  - `fromWeb3`: Load **keyPair** from `web3Accounts` using `@polkadot/extension-dapp`.
 
-To communicate with any substrate-based chain, at least **two** components are required.
+  - `fromUri`: Load **keyPair** from a secret URI, Example: `//Alice///password` or a `mnemonic phrase`.
 
-1. `WSPovider and ApiPromise`: RPC client to connect to the network. The **@polkadot/api** package exposes an entirely promise-based implementation of RPC methods for any substrate-based chain.
+- **SubspaceClient**: Class that loads an **Identity** instance and creates providers to interact with the network.
 
-2. `KeyPair`: Public and private key pairs can to **sign** and **send** transactions to the network.
-   There are two different use cases to load a **keyPair**: a **Dapp** (User Interface) and a backend service like \*_Node.js._
+  - `connect`: Create an `ApiPromise` and `WsProvider`, returning a **SubspaceClient** instance ready to call:
 
-- 2.1 `@polkadot/extension-dapp and @polkadot/ui-keyring`
+    - `putObject`: Receives an **Object** as Uint8Array, it create and submit a signed `put` transaction and return an **objectId**.
 
-  Load a **keyPair** to be used on a Dapp using an injected **web3Account**.
-  The app user can sign and securely send transactions using for example, a browser extension like [Polkadot{.js} extension](https://github.com/polkadot-js/extension). `@polkadot/extension-dapp` and `@polkadot/ui-keyring` packages are used to integrate a dapp with the extension.
-
-- 2.2 `@polkadot/keyring`
-
-  A **KeyPair** can be used from a node.js server to sign and send transactions with no human interaction **@polkadot/keyring** package allows to load and store **keyPairs**.
-  The user will need to load an account from a mnemonic phrase or seed.
-
-**Subspace.js** uses these **Polkadot.js** libraries to wrap and expose specific methods related to the _Storage API._
-
-- **Identity**: Expose a simple way to create a **keyPair** from different sources. We need this to create a **SubspaceClient**.
-
-  - `fromWeb3`: Creates an **Identity** instance from `web3Accounts` using @polkadot/extension-dapp.
-
-  - `fromUri`: Creates an **Identity** from a secret URI, Example: `//Alice///password` or a `mnemonic phrase`.
-
-  - `fromKeyPair`: Creates an **Identity** from an explicit `publicKey/secreteKey` combination
-
-- **SubspaceClient**: Expose methods connect to the network and call **put** and **findObject** functionalities for the [pallet-object-store](https://github.com/subspace/subspace/tree/main/crates/pallet-object-store).
-
-  - `connect`: Create an `apiPromise` instance connected to a `client node` and a `WsProvider` instance to the `farmer node,` returning a **SubspaceClient** instance to call:
-
-    - `putObject`: Receives **Object** data creating a message (**put**) to be signed and sent to the `client node`. Return an **objectId**.
-
-    - `getObject`: Receives an **objectId** calling findObject rpc method to the `farmer node`. Return the **Object** data.
+    - `getObject`: Receives an **objectId** calling `findObject` to return the **Object** as Uint8Array.
 
 # Run this project.
 
@@ -66,7 +40,7 @@ Build the library.
 
 - `npm run build`
 
-# Usage
+## Usage
 
 ```javascript
 // Import the Subspace.js library.
@@ -91,7 +65,7 @@ const objectId: string = await subspaceClient.putObject(objectData);
 const object: Uint8Array = await subspaceClient.getObject(objectId);
 ```
 
-# Run the examples.
+## Run the examples.
 
 - Check the examples folder for node.js and browser.
 
