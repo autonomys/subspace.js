@@ -1,0 +1,104 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Subspace.js html-js example</title>
+  </head>
+
+  <body>
+    <div>
+      <h1>Subspace.js html-js example</h1>
+      <hr />
+
+      <h2>
+        1. Loaded injected account:
+        <h3 id="injectedAccount"></h3>
+      </h2>
+
+      <hr />
+
+      <h2>2. Load an image file.</h2>
+      <input type="file" accept="image/*" onchange="loadFileImage(event)" />
+      <img id="inputImage" />
+      <hr />
+
+      <h2>3. Put the file.</h2>
+      <button onclick="putObject()">Submit putObject</button>
+      <h3 id="objectId"></h3>
+      <hr />
+
+      <h2>4. Get the file.</h2>
+      <button onclick="getObject()">Submit getObject</button>
+      <img id="resultImage" />
+      <h3></h3>
+    </div>
+    <script src="subspace.browser.js"></script>
+
+    <script>
+      // Declare constants
+      const NODE_WS_PROVIDER = "ws://localhost:9944";
+      const FARMER_WS_PROVIDER = "ws://localhost:9955";
+
+      // Load classes from subspace.js
+      const Identity = Subspace.js.Identity;
+      const SubspaceClient = Subspace.js.SubspaceClient;
+
+      // Declare global variables
+      let identity;
+      let subspaceClient;
+      let imageData;
+      let objectId;
+      let object;
+    </script>
+
+    <script>
+      async function initApp() {
+        identity = await Identity.fromWeb3();
+        subspaceClient = await SubspaceClient.connect(
+          identity,
+          NODE_WS_PROVIDER,
+          FARMER_WS_PROVIDER
+        );
+        const address = identity.getKeyringPair().address;
+        document.getElementById("injectedAccount").innerHTML = address;
+      }
+
+      async function putObject() {
+        if (!imageData) return alert("Select an image first.");
+        objectId = await subspaceClient.putObject(imageData);
+        document.getElementById("objectId").innerHTML = "objectId: " + objectId;
+      }
+
+      async function getObject() {
+        if (!objectId) return alert("Put the file first.");
+        object = await subspaceClient.getObject(objectId);
+
+        const b64encoded = btoa(String.fromCharCode.apply(null, object));
+        document.getElementById(
+          "resultImage"
+        ).src = `data:image/*;base64,${b64encoded}`;
+      }
+
+      function loadFileImage(e) {
+        let files = e.target.files;
+        if (files && files.length) {
+          const image = files[0];
+          let frAsUrl = new FileReader();
+          let frAsArrayBuffer = new FileReader();
+
+          frAsUrl.onload = function () {
+            document.getElementById("inputImage").src = frAsUrl.result;
+          };
+          frAsUrl.readAsDataURL(image);
+
+          frAsArrayBuffer.onload = function () {
+            imageData = new Uint8Array(frAsArrayBuffer.result);
+          };
+          frAsArrayBuffer.readAsArrayBuffer(image);
+        }
+      }
+      
+      setTimeout(initApp, 1000);
+    </script>
+  </body>
+</html>
