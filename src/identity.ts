@@ -1,7 +1,7 @@
 import { cryptoWaitReady } from "@polkadot/util-crypto";
 import { Keyring } from "@polkadot/api";
 import { KeyringPair } from "@polkadot/keyring/types";
-import { appSettings, accountSettings, keyringOptions } from "./config";
+import { appSettings, accountSettings, keyringOptions } from "./config/index.js";
 
 /**
  * @name Identity

@@ -1,4 +1,4 @@
-import { SubspaceClient } from "./subspaceClient";
-import { Identity } from "./identity";
+import { SubspaceClient } from "./subspaceClient.js";
+import { Identity } from "./identity.js";
 
 export { SubspaceClient, Identity };

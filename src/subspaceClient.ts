@@ -2,8 +2,8 @@ import type { AddressOrPair } from "@polkadot/api/types";
 import type { Signer } from "@polkadot/types/types";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { hexToU8a, u8aToHex } from "@polkadot/util";
-import { Identity } from "./identity";
-import { appSettings } from "./config";
+import { Identity } from "./identity.js";
+import { appSettings } from "./config/index.js";
 
 /**
  * @name SubspaceClient
