@@ -44,7 +44,7 @@ Build the library.
 
 ```javascript
 // Import the library.
-import { SubspaceClient, Identity } from 'subspace.js'
+import { SubspaceClient, Identity } from '@subspace/subspace'
 
 // Generate an Identity from node.js
 const identity = await Identity.fromUri(mnemonic)
