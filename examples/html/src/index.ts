@@ -59,4 +59,4 @@ async function init() {
     (document.getElementById('injectedAccount') as HTMLHeadingElement).innerHTML = address
 }
 
-setTimeout(init, 2000)
+init()

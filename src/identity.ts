@@ -23,13 +23,16 @@ export class Identity {
    * If it is not present, the method will set default keypair using the first account from web3Accounts.
    * @return Promise<Identity>
    */
-   public static async fromWeb3(address?: string | Uint8Array): Promise<Identity> {
+  public static async fromWeb3(address?: string | Uint8Array): Promise<Identity> {
     if (await cryptoWaitReady()) {
       // import polkadot extension methods only if web3 is available (use only in browser context)
       const { web3Accounts, web3Enable } = await import(
         "@polkadot/extension-dapp"
       );
-      const isWeb3Enable = await web3Enable(appSettings.APP_NAME);
+      const isWeb3Enable = await web3Enable(appSettings.APP_NAME,
+        // In case the extension is still not injected in the window object.
+        // we add compatInit array to await the extension.
+        [() => new Promise<boolean>(resolve => setTimeout(() => resolve(true), 500))]);
       if (!isWeb3Enable) throw new Error("Web3 not enabled or available.");
 
       const allWeb3Accounts = await web3Accounts(accountSettings);
