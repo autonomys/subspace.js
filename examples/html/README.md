@@ -1,17 +1,17 @@
-# Node js example.
+# Html example.
 
 This example uses subspace.js to:
 
-- Load Identity.
+- Load Identity using **web3Accounts** (Polkadot{.js} extension).
 
-  - Create an `Identity` from a sample account.
-  - Generate a `SubspaceClient` and load the `Identity` from the sample account.
+  - Create an `Identity` from the injected account.
+  - Generate a `SubspaceClient` and load the `Identity` from the extension.
   - Connects to the Subspace network.
 
 - Put Object:
 
-  - Load a sample `Object` data (`sample-input.jpg`) as an array of bytes.
-  - Send the `Object` to the network calling `putObject`.
+  - Load an image file from the dapp.
+  - Send the image to the network calling `putObject`.
   - Receives the `objectId` from the previous call.
 
 - Get Object:
@@ -19,7 +19,7 @@ This example uses subspace.js to:
   - Send the `objectId` to the network calling `getObject`.
   - Receives the `Object` from the previous call.
     _Note, the call will return `object not found` until the next block archive process runs. It could take some minutes to get the object from the store._
-- Write the file to disk `sample-from-objectStore.jpg`.
+- Show the image obtained from `getObject`.
 
 # Install
 
@@ -27,17 +27,11 @@ Install dependencies:
 
 `npm ci`
 
-# Build
-
-Generate the build in `dist` folder.:
-
-`npm run build`
-
 # Run
 
 Run the example:
 
-`npm run start`
+`npm start`
 
 ## Connecting to the network
 

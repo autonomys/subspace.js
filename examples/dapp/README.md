@@ -18,6 +18,7 @@ This example uses subspace.js to:
 
   - Send the `objectId` to the network calling `getObject`.
   - Receives the `Object` from the previous call.
+    _Note, the call will return `object not found` until the next block archive process runs. It could take some minutes to get the object from the store._
 
 - Show the image obtained from `getObject`.
 
@@ -33,11 +34,18 @@ Run the example:
 
 `npm start`
 
-## .env
+## Connecting to the network
 
-You can use the `.env` file to configure the providers endoints, if .env is not present the SubspaceClient will use the default endpoints.
+You can use the `.env` file to configure the providers endoints, if .env is not present the SubspaceClient will use the default endpoints to localhost.
 
 ```
 REACT_APP_NODE_WS_PROVIDER=ws://localhost:9944
 REACT_APP_FARMER_WS_PROVIDER=ws://localhost:9955
+```
+
+Or you can connect to the public test network.
+
+```
+REACT_APP_NODE_WS_PROVIDER=wss://test-rpc.subspace.network
+REACT_APP_FARMER_WS_PROVIDER=wss://test-rpc.subspace.network/farmer-rpc
 ```

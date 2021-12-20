@@ -1,4 +1,4 @@
-# Subspace.js
+# @subspace/subspace
 
 This JavaScript library provides a simple API to submit and retrieve user data to the [Subspace network](https://subspace.network/). The project is in active development with a [live test network](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Ftest-rpc.subspace.network#/explorer) designed to provide scalable and distributed archival storage.
 
@@ -43,8 +43,8 @@ Build the library.
 ## Usage
 
 ```javascript
-// Import the Subspace.js library.
-import { SubspaceClient, Identity } from "subspace.js";
+// Import the library.
+import { SubspaceClient, Identity } from "@subspace/subspace";
 
 // Generate an Identity from node.js
 const identity = await Identity.fromUri(mnemonic);
@@ -71,3 +71,8 @@ const object: Uint8Array = await subspaceClient.getObject(objectId);
 
   - [node.js](./examples/ts-node).
   - [dapp](./examples/dapp).
+  - [html](./examples/html).
+
+## Running a local network
+
+You can check the [Subspace repository](https://github.com/subspace/subspace) to learn how configure and run your local network.

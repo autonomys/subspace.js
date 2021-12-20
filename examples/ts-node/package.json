@@ -7,7 +7,7 @@
     "start": "node ./dist/index.js"
   },
   "dependencies": {
-    "subspace.js": "file:../../../subspace.js"
+    "@subspace/subspace": "file:../../../subspace.js"
   },
   "devDependencies": {
     "@types/node": "^16.11.9",

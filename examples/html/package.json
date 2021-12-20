@@ -5,7 +5,7 @@
     "start": "webpack serve"
   },
   "dependencies": {
-    "subspace.js": "file:../../../subspace.js"
+    "@subspace/subspace": "file:../../../subspace.js"
   },
   "devDependencies": {
     "ts-loader": "^9.2.6",
