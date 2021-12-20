@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "lib": ["ES2021"],
-    "target": "esnext",
+    "target": "ES2021",
     "outDir": "dist",
     "module": "commonjs",
     "skipLibCheck": true,
