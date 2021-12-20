@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "target": "es5",
+    "target": "es6",
     "outDir": "dist",
-    "module": "esnext",
+    "module": "commonjs",
     "skipLibCheck": true,
     "moduleResolution": "node",
     "sourceMap": true,

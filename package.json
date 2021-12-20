@@ -5,7 +5,6 @@
   "description": "This JavaScript library provides a simple API to submit and retrieve user data to the Subspace network.",
   "main": "./dist/subspace.js",
   "types": "./dist/subspace.d.ts",
-  "type": "module",
   "files": [
     "dist"
   ],
