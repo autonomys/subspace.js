@@ -1,4 +1,4 @@
-import { SubspaceClient, Identity } from "subspace.js";
+import { SubspaceClient, Identity } from "@subspace/subspace";
 import { promises as fs } from "fs";
 
 const NODE_WS_PROVIDER = "ws://localhost:9944";

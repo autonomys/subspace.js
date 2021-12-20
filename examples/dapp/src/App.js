@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SubspaceClient, Identity } from "subspace.js";
+import { SubspaceClient, Identity } from "@subspace/subspace";
 import "./App.css";
 
 const NODE_WS_PROVIDER = process.env.REACT_APP_NODE_WS_PROVIDER;
