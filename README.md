@@ -44,25 +44,25 @@ Build the library.
 
 ```javascript
 // Import the library.
-import { SubspaceClient, Identity } from '@subspace/subspace'
+import { SubspaceClient, Identity } from "@subspace/subspace";
 
 // Generate an Identity from node.js
-const identity = await Identity.fromUri(mnemonic)
+const identity = await Identity.fromUri(mnemonic);
 // Generate an Identity from broser using web3Account (injected by extension)
-const identity = await Identity.fromWeb3()
+const identity = await Identity.fromWeb3();
 
 // Generate a SubspaceClient and connect to node and farmer rpc endpoints.
 const subspaceClient = await SubspaceClient.connect(
   identity,
   NODE_WS_PROVIDER,
-  FARMER_WS_PROVIDER,
-)
+  FARMER_WS_PROVIDER
+);
 
 // Put the file as (Uint8Array) in to the objectStore and return the objectId
-const objectId: string = await subspaceClient.putObject(objectData)
+const objectId: string = await subspaceClient.putObject(objectData);
 
 // Using the objectId get the file as (Uint8Array) from the objectStore.
-const object: Uint8Array = await subspaceClient.getObject(objectId)
+const object: Uint8Array = await subspaceClient.getObject(objectId);
 ```
 
 ## Run the examples.
