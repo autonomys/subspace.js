@@ -26,14 +26,5 @@
       }
     }
   ],
-  "parser": "@typescript-eslint/parser",
-  "rules": {
-    "no-async-promise-executor": "warn",
-    "@typescript-eslint/prefer-readonly": [
-      1,
-      {
-        "onlyInlineLambdas": true
-      }
-    ]
-  }
+  "parser": "@typescript-eslint/parser"
 }
