@@ -62,26 +62,43 @@ export class SubspaceClient {
    * objectId can be used to retrieve the data with getObject method.
    */
   public putObject(object: Uint8Array): Promise<string> {
-    return new Promise<string>(async (resolve, reject) => {
+    return new Promise<string>((resolve, reject) => {
       const keyPair = this.identity.getKeyringPair();
-      const locked: boolean = keyPair.isLocked;
-      const account: AddressOrPair = locked ? keyPair.address : keyPair;
-
       // Run only if the keyPair was loaded from extension
       if (keyPair.meta && keyPair.meta.source === "polkadot-js") {
-        const { web3FromSource } = await import("@polkadot/extension-dapp");
-        const source = keyPair.meta.source;
-        const injected = await web3FromSource(source);
-        this.setSigner(injected.signer);
-      }
+        import("@polkadot/extension-dapp").then(({ web3FromSource }) => {
+          web3FromSource(keyPair.meta.source as string).then((injected) => {
+            this.setSigner(injected.signer);
 
-      const unsubscribe = await this.api.tx.objectStore
+            resolve(this.sendObject(object));
+
+          });
+        }).catch((e) => {
+          reject(e);
+        });
+      } else {
+        resolve(this.sendObject(object));
+      }
+    });
+  }
+  /**
+   * @name sendObject
+   * @summary private method called from putObject.
+   */
+  private sendObject(object: Uint8Array): Promise<string> {
+    const keyPair = this.identity.getKeyringPair();
+    const locked: boolean = keyPair.isLocked;
+    const account: AddressOrPair = locked ? keyPair.address : keyPair;
+
+    return new Promise<string>((resolve, reject) => {
+      let unsubscribe: () => void;
+      this.api.tx.objectStore
         .put(u8aToHex(object))
         .signAndSend(account, ({ status, events, isError }) => {
           if (status.isInBlock) {
             for (const { event } of events) {
               if (
-                event.method === "DataSubmitted" &&
+                event.method === "ObjectSubmitted" &&
                 event.section === "objectStore"
               ) {
                 resolve(event.data[1].toString().slice(2));
