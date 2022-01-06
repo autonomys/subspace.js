@@ -43,6 +43,16 @@ export class SubspaceClient {
     private readonly identity: Identity
   ) {}
 
+ /**
+ * @name disconnect
+ * @summary method called to disconnect from the farmer and provider
+ */
+  public async disconnect(): Promise<boolean> {
+    await Promise.all([
+      this.api.disconnect(),
+      this.farmerProvider.disconnect()]);
+    return true;
+  }
   /**
    * @name setSigner
    * @summary Set the current api signer to use to submit extrinsics.
@@ -91,7 +101,6 @@ export class SubspaceClient {
     const account: AddressOrPair = locked ? keyPair.address : keyPair;
 
     return new Promise<string>((resolve, reject) => {
-      let unsubscribe: () => void;
       this.api.tx.objectStore
         .put(u8aToHex(object))
         .signAndSend(account, ({ status, events, isError }) => {
@@ -102,12 +111,10 @@ export class SubspaceClient {
                 event.section === "objectStore"
               ) {
                 resolve(event.data[1].toString().slice(2));
-                unsubscribe();
               }
             }
           } else if (isError) {
             reject(new Error(`isError: ${isError}`));
-            unsubscribe();
           }
         });
     });
