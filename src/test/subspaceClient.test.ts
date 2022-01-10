@@ -30,20 +30,15 @@ tap.test('SubspaceClient Class', async (t) => {
     );
 
     const objectId: string = await subspaceClient.putObject(objectData);
+    await subspaceClient.disconnect();
     t.ok(objectId, "objectId");
-
-    tap.test('getObject should return object data for objectId', async (t) => {
-      const object: Uint8Array = await subspaceClient.getObject(objectId);
-      await subspaceClient.disconnect();
-      t.ok(object, "object found");
-      t.same(object, objectData, "both objects are the same");
-      t.end();
-    })
     t.end();
   })
 
+  tap.test('getObject should return data if object is found');
+
   tap.test('getObject should reject if object is not found');
-  
+
   t.end();
 })
 
