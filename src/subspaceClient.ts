@@ -71,36 +71,18 @@ export class SubspaceClient {
    * @return Promise<string> If the Object was successfully stored it return the objectId.
    * objectId can be used to retrieve the data with getObject method.
    */
-  public putObject(object: Uint8Array): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      const keyPair = this.identity.getKeyringPair();
-      // Run only if the keyPair was loaded from extension
-      if (keyPair.meta && keyPair.meta.source === "polkadot-js") {
-        import("@polkadot/extension-dapp").then(({ web3FromSource }) => {
-          web3FromSource(keyPair.meta.source as string).then((injected) => {
-            this.setSigner(injected.signer);
-
-            resolve(this.sendObject(object));
-
-          });
-        }).catch((e) => {
-          reject(e);
-        });
-      } else {
-        resolve(this.sendObject(object));
-      }
-    });
-  }
-  /**
-   * @name sendObject
-   * @summary private method called from putObject.
-   */
-  private sendObject(object: Uint8Array): Promise<string> {
+  public async putObject(object: Uint8Array): Promise<string> {
     const keyPair = this.identity.getKeyringPair();
     const locked: boolean = keyPair.isLocked;
     const account: AddressOrPair = locked ? keyPair.address : keyPair;
-
-    return new Promise<string>((resolve, reject) => {
+    // Run only if the keyPair was loaded from extension
+    if (keyPair.meta && keyPair.meta.source === "polkadot-js") {
+      const { web3FromSource } = await import("@polkadot/extension-dapp");
+      const source = keyPair.meta.source;
+      const injected = await web3FromSource(source);
+      this.setSigner(injected.signer);
+    }
+    const result = await new Promise<string>((resolve, reject) => {
       this.api.tx.objectStore
         .put(u8aToHex(object))
         .signAndSend(account, ({ status, events, isError }) => {
@@ -118,6 +100,7 @@ export class SubspaceClient {
           }
         });
     });
+    return result;
   }
 
   /**
@@ -126,15 +109,9 @@ export class SubspaceClient {
    * @param objectId An objectId created from putObject used to find and return the Object data.
    * @return Promise<Uint8Array> If the Object was found it return the Object data.
    */
-  public getObject(objectId: string): Promise<Uint8Array> {
-    return new Promise<Uint8Array>((resolve, reject) => {
-      this.farmerProvider.send("findObject", [objectId]).then((result) => {
-        if (result) {
-          resolve(hexToU8a(result.data));
-        } else {
-          reject(new Error("Object not found"));
-        }
-      });
-    });
+  public async getObject(objectId: string): Promise<Uint8Array> {
+    const result = await this.farmerProvider.send("findObject", [objectId])
+    if (result) return (hexToU8a(result.data));
+    throw new Error(`Object with id ${objectId} not found`);
   }
 }
