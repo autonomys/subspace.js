@@ -1,6 +1,6 @@
 name: TypeScript
 
-on: [pull_request]
+on: [push, pull_request]
 
 jobs:
   ts-lint-and-build:
