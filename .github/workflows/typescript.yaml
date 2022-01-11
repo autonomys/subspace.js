@@ -1,0 +1,17 @@
+name: TypeScript
+
+on: [push, pull_request]
+
+jobs:
+  ts-lint-and-build:
+    runs-on: ubuntu-20.04
+    name: Run eslint, check typescript and run tests
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "16"
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
