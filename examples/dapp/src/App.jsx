@@ -56,7 +56,7 @@ function App() {
     reader.readAsArrayBuffer(file);
   };
 
-  // Please, note: Archivation takes 100-120 blocks to complete, the object is not retrievable right away
+  // Please, note: Archiving takes 100-120 blocks to complete, the object is not retrievable right away
   const getObject = async () => {
     try {
       const object = await subspaceClient.getObject(objectId);
