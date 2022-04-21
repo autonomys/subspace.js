@@ -20,6 +20,7 @@ async function putObject() {
     htmlObjectId.innerHTML = 'objectId: ' + objectId
 }
 
+// Please, note: Archivation takes 100-120 blocks to complete, the object is not retrievable right away
 async function getObject() {
     if (!objectId) return alert('Put the file first.')
     object = await subspaceClient.getObject(objectId)

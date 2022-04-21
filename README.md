@@ -26,6 +26,8 @@ To expose these methods, this library implements two main classes:
 
     - `getObject`: Receives an **objectId** calling `findObject` to return the **Object** as Uint8Array.
 
+> Please, note that object will be retrievable after it is archived on the blockchain, it won't be available right away. Archivation takes 100-120 blocks to complete. Caching mechanism for faster retrievability will be introduced soon
+
 # Run this project.
 
 Clone this repository:
