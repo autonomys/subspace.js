@@ -23,6 +23,7 @@ const objectId: string = await subspaceClient.putObject(objectData);
 console.log("objectId", objectId);
 
 // Using the objectId get the file as (Uint8Array) from the objectStore.
+// Please, note: Archiving takes 100-120 blocks to complete, the object is not retrievable right away
 const object: Uint8Array = await subspaceClient.getObject(objectId);
 
 // Write the file as a copy from the original
