@@ -78,3 +78,4 @@ const object: Uint8Array = await subspaceClient.getObject(objectId);
 ## Running a local network
 
 You can check the [Subspace repository](https://github.com/subspace/subspace) to learn how configure and run your local network.
+> Make sure you have Node RPC and Farmer endpoints exposed
