@@ -14,6 +14,10 @@ function App() {
   const [message, setMessage] = useState(null);
   const [fileData, setFileData] = useState(null);
 
+  const availableAccounts = identity
+    ? identity.getKeyring().getPairs()
+    : [];
+
   useEffect(() => {
     Identity.fromWeb3()
       .then((identity) => {
@@ -41,10 +45,6 @@ function App() {
     }
   }, [identity]);
 
-  const onChange = (address) => {
-    setSelectedAccount(address);
-  };
-
   const loadFile = (file) => {
     let reader = new FileReader();
     reader.onload = () => {
@@ -56,7 +56,6 @@ function App() {
     reader.readAsArrayBuffer(file);
   };
 
-  // Please, note: Archiving takes 100-120 blocks to complete, the object is not retrievable right away
   const getObject = async () => {
     try {
       const object = await subspaceClient.getObject(objectId);
@@ -75,6 +74,8 @@ function App() {
     }
   };
 
+  const handleAccountSelect = ({ target }) => setSelectedAccount(target.value);
+
   return (
     <div className="App">
       <h1>Subspace.js dapp example</h1>
@@ -82,24 +83,12 @@ function App() {
       <hr />
       <h2>1. Select an account.</h2>
       <h3>
-        <select id="accounts">
-          {identity &&
-            identity
-              .getKeyring()
-              .getPairs()
-              .map((account) => {
-                return (
-                  <option
-                    key={account.address}
-                    value={account.address}
-                    onClick={() => {
-                      onChange(account.address);
-                    }}
-                  >
-                    {account && getLabel(account)}
-                  </option>
-                );
-              })}
+        <select id="accounts" onChange={handleAccountSelect}>
+          {availableAccounts.map((account) => (
+            <option key={account.address} value={account.address}>
+              {account && getLabel(account)}
+            </option>
+          ))}
         </select>
       </h3>
       <h3> {selectedAccount && "Selected account: " + selectedAccount}</h3>
@@ -123,18 +112,12 @@ function App() {
         ></input>
       </h3>
       <h3>
-        {fileData && (
-          <img
-            src={`data:image/*;base64,${Buffer.from(fileData).toString(
-              "base64"
-            )}`}
-          ></img>
-        )}
+        {fileData && <img src={URL.createObjectURL(new Blob([fileData.buffer]))} />}
       </h3>
       <hr />
       <h2>3. Put a file.</h2>
       <h3>
-        <button disabled={!fileData} onClick={() => putObject()}>
+        <button disabled={!fileData} onClick={putObject}>
           Submit putObject
         </button>
       </h3>
@@ -142,19 +125,14 @@ function App() {
       <hr />
       <h2>4. Get the file.</h2>
       <h3>
-        <button disabled={!objectId} onClick={() => getObject()}>
+        <button disabled={!objectId} onClick={getObject}>
           Submit getObject
         </button>
       </h3>
+      <p>Please, note: Archiving takes 100-120 blocks to complete, the object is not retrievable right away</p>
       <p>{message && " " + message}</p>
       <h3>
-        {object && (
-          <img
-            src={`data:image/*;base64,${Buffer.from(object).toString(
-              "base64"
-            )}`}
-          ></img>
-        )}
+        {object && <img src={URL.createObjectURL(new Blob([object.buffer]))}></img>}
       </h3>
     </div>
   );
