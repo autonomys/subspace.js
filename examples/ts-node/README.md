@@ -39,6 +39,8 @@ Run the example:
 
 `npm run start`
 
+> Please, note: Archiving takes 100-120 blocks to complete, the object is not retrievable right away
+
 ## Connecting to the network
 
 You can edit the `./scr/index.ts` file to configure the providers endoints.
